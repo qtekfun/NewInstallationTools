@@ -1,0 +1,9 @@
+{
+    "workbench.colorTheme": "Default Dark+",
+    "security.workspace.trust.untrustedFiles": "open",
+    "cmake.configureOnOpen": false,
+    "files.trimTrailingWhitespace": true,
+    "workbench.activityBar.visible": true,
+    "workbench.startupEditor": "none",
+    "explorer.confirmDelete": false
+}
