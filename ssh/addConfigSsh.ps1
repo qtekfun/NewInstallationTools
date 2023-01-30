@@ -1,22 +1,28 @@
+#Preguntar por el nombre de la clave ssh si no se pasa por argumento
 param (
-    [string]$KeyName
+  [string]$KeyName = $(Read-Host "Introduce el nombre de la clave ssh")
 )
 
-# Pregunta por el alias del host
-$HostAlias = Read-Host -Prompt "Introduce el alias del host"
+#Directorio donde se guardan las claves ssh
+$SSHDirectory = "$env:UserProfile\.ssh"
 
-# Pregunta por el hostname
-$HostName = Read-Host -Prompt "Introduce el hostname"
+#Comprobar si existe el archivo de configuración
+if (!(Test-Path "$SSHDirectory\config")){
+  New-Item "$SSHDirectory\config" -ItemType File
+}
 
-# Pregunta por el puerto
-$Port = Read-Host -Prompt "Introduce el puerto"
+#Preguntar por los datos necesarios para agregar la entrada al archivo de configuración
+$Alias = Read-Host "Introduce un alias para la entrada"
+$HostName = Read-Host "Introduce el nombre del host"
+$Port = Read-Host "Introduce el número de puerto"
+$User = Read-Host "Introduce el nombre de usuario"
 
-# Pregunta por el usuario
-$User = Read-Host -Prompt "Introduce el usuario"
+#Agregar la entrada al archivo de configuración
+Add-Content "$SSHDirectory\config" "Host $Alias
+  HostName $HostName
+  Port $Port
+  User $User
+  IdentityFile $SSHDirectory\$KeyName"
 
-# Añade la entrada al fichero de configuración de ssh
-$configPath = "$env:USERPROFILE/.ssh/config"
-$entry = "Host $HostAlias`nHostName $HostName`nPort $Port`nUser $User`nIdentityFile ~/.ssh/$KeyName`n"
-Add-Content $configPath $entry
 
-Write-Host "Entrada añadida al fichero de configuración de ssh en $configPath"
+Write-Host "Entrada añadida al fichero de configuración de ssh en $SSHDirectory\config"
