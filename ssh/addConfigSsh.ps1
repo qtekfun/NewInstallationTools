@@ -17,12 +17,29 @@ $HostName = Read-Host "Introduce el nombre del host"
 $Port = Read-Host "Introduce el número de puerto"
 $User = Read-Host "Introduce el nombre de usuario"
 
-#Agregar la entrada al archivo de configuración
-Add-Content "$SSHDirectory\config" "Host $Alias
-  HostName $HostName
-  Port $Port
-  User $User
+# Construir la entrada
+$entry = "Host $Alias"
+
+if ($HostName) {
+  $entry += "
+  HostName $HostName"
+}
+
+if ($Port) {
+  $entry += "
+  Port $Port"
+}
+
+if ($User) {
+  $entry += "
+  User $User"
+}
+
+$entry += "
   IdentityFile $SSHDirectory\$KeyName"
+
+# Agregar la entrada al archivo de configuración
+Add-Content "$SSHDirectory\config" $entry
 
 
 Write-Host "Entrada añadida al fichero de configuración de ssh en $SSHDirectory\config"
